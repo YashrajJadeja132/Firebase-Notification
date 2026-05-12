@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firebase Push Notifications - Setup & Test</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔔</text></svg>" />
+</head>
+<body>
+  <header>
+    <h1>🔔 Firebase Push Notifications</h1>
+    <p class="subtitle">Complete onboarding, configuration, and live testing in one page.</p>
+  </header>
+
+  <main>
+    <!-- ============== ONBOARDING ============== -->
+    <section id="onboarding" class="card">
+      <h2>📋 Onboarding — Get Your Firebase Credentials</h2>
+      <p>Follow these <strong>6 steps</strong> to get every credential you need. After step 6, paste your config below and you are done.</p>
+
+      <ol class="steps">
+        <li>
+          <h3>Step 1 — Create a Firebase project</h3>
+          <ol>
+            <li>Open <a href="https://console.firebase.google.com" target="_blank" rel="noopener">https://console.firebase.google.com</a> and sign in.</li>
+            <li>Click <strong>"Add project"</strong> → give it a name → continue.</li>
+            <li>You can disable Google Analytics for now (not required for FCM).</li>
+            <li>Wait for the project to be created, then click <strong>Continue</strong>.</li>
+          </ol>
+        </li>
+
+        <li>
+          <h3>Step 2 — Register a Web App</h3>
+          <ol>
+            <li>On the project dashboard, click the <strong>&lt;/&gt; (Web)</strong> icon under "Get started by adding Firebase to your app".</li>
+            <li>Give the app a nickname (e.g., <em>"push demo"</em>) and click <strong>Register app</strong>.</li>
+            <li><strong>Do NOT check "Firebase Hosting"</strong> unless you plan to deploy there.</li>
+            <li>You will see a code snippet with a <code>firebaseConfig</code> object. <strong>Copy this entire object</strong> — you'll paste it below in Step 7.</li>
+          </ol>
+          <pre><code>// Example - yours will have different values:
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abc123..."
+};</code></pre>
+        </li>
+
+        <li>
+          <h3>Step 3 — Get the VAPID (Web Push) Key</h3>
+          <p>This is the public key the browser uses to subscribe to push.</p>
+          <ol>
+            <li>In Firebase Console, click the <strong>⚙️ gear icon</strong> → <strong>Project settings</strong>.</li>
+            <li>Open the <strong>Cloud Messaging</strong> tab.</li>
+            <li>Scroll to <strong>"Web configuration" → "Web Push certificates"</strong>.</li>
+            <li>Click <strong>"Generate key pair"</strong> if no key exists.</li>
+            <li>Copy the key (it starts with <code>B...</code> and is ~88 chars). Paste it below in Step 7.</li>
+          </ol>
+        </li>
+
+        <li>
+          <h3>Step 4 — Generate the Service Account JSON (for the server)</h3>
+          <p>This grants your <strong>backend</strong> permission to send pushes.</p>
+          <ol>
+            <li>In Project Settings, open the <strong>Service accounts</strong> tab.</li>
+            <li>Click <strong>"Generate new private key"</strong> → confirm.</li>
+            <li>A JSON file is downloaded. <strong>Rename it to <code>service-account.json</code></strong>.</li>
+            <li>Move it to the project folder: <code>server/service-account.json</code></li>
+            <li>⚠️ <strong>Never commit this file to git.</strong> It is already in <code>.gitignore</code>.</li>
+          </ol>
+        </li>
+
+        <li>
+          <h3>Step 5 — (Optional) Enable Cloud Messaging API (V1)</h3>
+          <p>On newer Firebase projects this is enabled by default. If sending fails with a <em>403 / API disabled</em> error:</p>
+          <ol>
+            <li>Open <a href="https://console.cloud.google.com/apis/library/fcm.googleapis.com" target="_blank" rel="noopener">Cloud Messaging API in Google Cloud Console</a>.</li>
+            <li>Make sure the right project is selected (top bar).</li>
+            <li>Click <strong>Enable</strong> if it isn't already.</li>
+          </ol>
+        </li>
+
+        <li>
+          <h3>Step 6 — Start the server</h3>
+          <p>In a terminal, from this project folder:</p>
+          <pre><code>npm install
+npm start</code></pre>
+          <p>Then open <code>http://localhost:3000</code> (this page). Browsers only allow notifications from <code>https://</code> or <code>localhost</code>.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============== CONFIGURATION ============== -->
+    <section id="configuration" class="card">
+      <h2>⚙️ Step 7 — Paste Your Firebase Web Config</h2>
+      <p>Paste the values from Step 2 and Step 3. They are saved in your browser <code>localStorage</code> only — no upload.</p>
+
+      <form id="configForm">
+        <div class="grid">
+          <label>apiKey
+            <input name="apiKey" placeholder="AIzaSy..." required />
+          </label>
+          <label>authDomain
+            <input name="authDomain" placeholder="your-project.firebaseapp.com" required />
+          </label>
+          <label>projectId
+            <input name="projectId" placeholder="your-project" required />
+          </label>
+          <label>storageBucket
+            <input name="storageBucket" placeholder="your-project.appspot.com" />
+          </label>
+          <label>messagingSenderId
+            <input name="messagingSenderId" placeholder="1234567890" required />
+          </label>
+          <label>appId
+            <input name="appId" placeholder="1:1234567890:web:abc..." required />
+          </label>
+          <label class="full">VAPID Key (Step 3)
+            <input name="vapidKey" placeholder="B... (~88 chars)" required />
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary">💾 Save Configuration</button>
+          <button type="button" id="clearConfig">Clear</button>
+        </div>
+      </form>
+
+      <div id="configStatus" class="status"></div>
+    </section>
+
+    <!-- ============== PERMISSION & TOKEN ============== -->
+    <section id="register" class="card">
+      <h2>🔐 Step 8 — Request Permission & Get FCM Token</h2>
+      <p>Click below to ask the browser for notification permission and obtain a device-specific FCM token.</p>
+      <div class="actions">
+        <button id="btnEnable" class="primary" disabled>🔔 Enable Notifications</button>
+        <button id="btnCopyToken" disabled>📋 Copy Token</button>
+      </div>
+      <div class="info">
+        <strong>Permission:</strong> <span id="permState">unknown</span><br />
+        <strong>FCM Token:</strong>
+        <code id="fcmToken">(not generated yet)</code>
+      </div>
+    </section>
+
+    <!-- ============== SEND TEST ============== -->
+    <section id="send" class="card">
+      <h2>🚀 Step 9 — Send a Test Notification</h2>
+      <p>Sends via your local server using the Admin SDK. Try sending while this tab is in the background to see the system notification.</p>
+
+      <form id="sendForm">
+        <label>Target
+          <select name="target">
+            <option value="self">This device (token shown above)</option>
+            <option value="broadcast">All registered tokens</option>
+            <option value="topic">Topic</option>
+            <option value="custom">Custom token</option>
+          </select>
+        </label>
+        <label id="topicField" hidden>Topic name
+          <input name="topic" placeholder="news" />
+        </label>
+        <label id="customField" hidden>Custom token
+          <input name="customToken" placeholder="paste another device's FCM token" />
+        </label>
+        <label>Title
+          <input name="title" value="Hello from Firebase 👋" required />
+        </label>
+        <label>Body
+          <input name="body" value="This is a test push notification." required />
+        </label>
+        <label>Click URL (optional)
+          <input name="link" placeholder="https://example.com" />
+        </label>
+        <label>Image URL (optional)
+          <input name="imageUrl" placeholder="https://.../picture.jpg" />
+        </label>
+
+        <div class="actions">
+          <button type="submit" class="primary">📤 Send Notification</button>
+        </div>
+      </form>
+
+      <div id="sendResult" class="status"></div>
+    </section>
+
+    <!-- ============== STATUS ============== -->
+    <section id="status" class="card">
+      <h2>📊 Server Status</h2>
+      <div id="serverStatus" class="info">Checking…</div>
+      <button id="btnRefreshStatus">🔄 Refresh</button>
+    </section>
+
+    <!-- ============== TROUBLESHOOTING ============== -->
+    <section class="card">
+      <h2>🛠 Troubleshooting</h2>
+      <details>
+        <summary>Permission says "denied" — how do I reset it?</summary>
+        <p>In Chrome: click the 🔒 lock icon in the address bar → <em>Site settings</em> → reset <strong>Notifications</strong> to "Ask".</p>
+      </details>
+      <details>
+        <summary>"messaging/unsupported-browser" error</summary>
+        <p>FCM requires HTTPS or <code>localhost</code>, plus support for Service Workers and the Push API. Safari requires version 16+ on iOS.</p>
+      </details>
+      <details>
+        <summary>"Registration token is not valid"</summary>
+        <p>Tokens can expire. Delete the token in your app and call <code>getToken()</code> again. Also confirm the VAPID key matches your Firebase project.</p>
+      </details>
+      <details>
+        <summary>Sending fails with 403 / API disabled</summary>
+        <p>Enable the Cloud Messaging API at <a href="https://console.cloud.google.com/apis/library/fcm.googleapis.com" target="_blank" rel="noopener">this link</a> for your project.</p>
+      </details>
+      <details>
+        <summary>Service worker not found / 404 on firebase-messaging-sw.js</summary>
+        <p>The service worker file <strong>must</strong> be served from the site root, with exactly that filename. Confirm it loads at <code>http://localhost:3000/firebase-messaging-sw.js</code>.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <p>Read the full guide: <a href="docs/SETUP.md">docs/SETUP.md</a> · <a href="docs/CREDENTIALS.md">docs/CREDENTIALS.md</a></p>
+  </footer>
+
+  <!-- Firebase compat builds keep the setup simple; v9 modular works too -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

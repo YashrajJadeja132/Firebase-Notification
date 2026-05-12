@@ -1,0 +1,23 @@
+{
+  "name": "firebase-push-notification",
+  "version": "1.0.0",
+  "description": "Complete Firebase Cloud Messaging (FCM) web push notification implementation with onboarding",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "keywords": [
+    "firebase",
+    "fcm",
+    "push-notification",
+    "web-push",
+    "cloud-messaging"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.3.0"
+  }
+}

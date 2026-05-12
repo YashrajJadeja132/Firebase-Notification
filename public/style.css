@@ -1,0 +1,180 @@
+:root {
+  --bg: #0f1226;
+  --bg-elev: #1a1d3a;
+  --card: #20254a;
+  --border: #2d3470;
+  --text: #e6e9ff;
+  --muted: #9aa0c7;
+  --primary: #ffca28;
+  --primary-text: #1a1d3a;
+  --success: #4ade80;
+  --error: #f87171;
+  --code-bg: #0a0d20;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(180deg, var(--bg), #0a0d20);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+header {
+  padding: 2rem 1rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+header h1 { margin: 0; font-size: 2rem; }
+header .subtitle { color: var(--muted); margin: 0.25rem 0 0; }
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.card h2 { margin-top: 0; }
+
+.steps { padding-left: 1.25rem; }
+.steps > li { margin-bottom: 1.5rem; }
+.steps h3 { margin: 0 0 0.5rem; color: var(--primary); }
+
+pre {
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+code {
+  font-family: "SF Mono", Consolas, Monaco, monospace;
+  font-size: 0.875rem;
+}
+p code, li code, .info code {
+  background: var(--code-bg);
+  padding: 0.125rem 0.4rem;
+  border-radius: 4px;
+}
+
+a { color: var(--primary); }
+
+form { display: flex; flex-direction: column; gap: 0.75rem; }
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+input, select {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.grid .full { grid-column: 1 / -1; }
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+button {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.15s;
+}
+button:hover:not(:disabled) { transform: translateY(-1px); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.primary {
+  background: var(--primary);
+  color: var(--primary-text);
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.status {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  word-break: break-word;
+  display: none;
+}
+.status.success { display: block; background: rgba(74, 222, 128, 0.1); border: 1px solid var(--success); color: var(--success); }
+.status.error   { display: block; background: rgba(248, 113, 113, 0.1); border: 1px solid var(--error); color: var(--error); }
+.status.info    { display: block; background: rgba(154, 160, 199, 0.1); border: 1px solid var(--border); color: var(--text); }
+
+.info {
+  background: var(--bg-elev);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+.info code {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  background: var(--code-bg);
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+details {
+  background: var(--bg-elev);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--border);
+}
+details summary { cursor: pointer; font-weight: 500; }
+details p { margin: 0.5rem 0 0; color: var(--muted); }
+
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+  header h1 { font-size: 1.5rem; }
+}
